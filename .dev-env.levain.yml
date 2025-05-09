@@ -1,0 +1,15 @@
+version: 0.0.1
+
+levain.config.noBaseDir: true
+
+dependencies:
+  - git
+  - cntlm
+
+  # IDE
+  - cmder
+  - intellij
+
+  # Front-end
+  - yarn-1
+  - node-runtime-18
