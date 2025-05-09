@@ -28,5 +28,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install
-    - run: npm cypress run
+    - run: yarn install
+    - run: yarn cypress run
