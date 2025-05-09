@@ -1,6 +1,6 @@
 import {Given, When, Then} from '@badeball/cypress-cucumber-preprocessor';
 
-Given("I open the homepage", () => {
+Given("I open Kitchen Sink", () => {
     cy.visit('https://example.cypress.io');
 });
 Then("I see the title {string}", (title: string) => {

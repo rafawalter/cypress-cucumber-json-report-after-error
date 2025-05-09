@@ -1,4 +1,4 @@
-Feature: Mdn Web Docs throw
+Feature: Mdn Web Docs throws an error
 
   Scenario: the page throws an error
     Given I visit web docs
@@ -7,7 +7,7 @@ Feature: Mdn Web Docs throw
     Then I get an error in the console
 
   Scenario: error after origin change
-    Given I open the homepage
+    Given I open Kitchen Sink
     And I visit web docs using javascript
     # breaks on the step above, since
     When I click "Run"
