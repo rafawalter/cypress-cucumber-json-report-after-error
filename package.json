@@ -1,0 +1,11 @@
+{
+  "name": "cypress-cucumber-json-report-after-error",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/rafawalter/cypress-cucumber-json-report-after-error.git",
+  "author": "Rafael Fraga Walter <rafawalter@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "14.3.2"
+  }
+}
