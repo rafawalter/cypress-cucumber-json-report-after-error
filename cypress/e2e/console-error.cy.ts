@@ -1,5 +1,5 @@
 describe('console error', () => {
-  it('passes', () => {
+  it('Visit the homepage', () => {
     cy.visit('https://example.cypress.io')
   })
   it('throws an error', () => {
@@ -8,6 +8,5 @@ describe('console error', () => {
     cy.window().then((win) => {
       win.eval('throw new Error("This is a custom JavaScript error")')
     })
-
   })
 })
