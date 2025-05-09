@@ -14,5 +14,14 @@
   },
   "dependencies": {
     "@badeball/cypress-cucumber-preprocessor": "^22.0.1"
+  },
+  "cypress-cucumber-preprocessor": {
+    "json": {
+      "enabled": true,
+      "output": "target/cucumber-reports/cucumber-report.json"
+    },
+    "pretty": {
+      "enabled": true
+    }
   }
 }
