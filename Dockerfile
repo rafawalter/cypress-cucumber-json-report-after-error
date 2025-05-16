@@ -36,7 +36,8 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
         git \
         fontconfig \
         bzip2 \
-        ssh \
+        ssh
+
 #### PRE REQUISITOS CYPRESS
         libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb \
     && echo "en_US.UTF-8    UTF-8\npt_BR.UTF-8    UTF-8" >> /etc/locale.gen \
@@ -46,29 +47,50 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     && apt-get clean all \
     && rm -rf /var/lib/apt/lists/*
 
+
+# Update package lists, install dependencies, add NodeSource repository, and install Node.js 18
+RUN apt-get update && apt-get install -y \
+    curl software-properties-common \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && corepack enable \
+    && corepack prepare yarn@stable --activate \
+    && rm -rf /var/lib/apt/lists/*
+
+# Verify installation (optional)
+RUN node -v && yarn -v
+
+
+
+
 RUN groupadd -g ${DOCKER_GID_PRD} ${group_docker} \
     && useradd -u ${uid} -m -d /var/jenkins_home ${user} \
     && usermod -aG docker ${user} \
     && groupadd -g ${DOCKER_GID} dockerdsv \
     && usermod -a -G dockerdsv  ${user}
 
-# TODO ############ INSTALACAO DOCKER CLI #################
-RUN curl -fsSL --create-dirs --output /usr/local/bin/docker \
-       "https://get.docker.com/builds/$(uname -s)/$(uname -m)/docker-${DOCKER_VERSION}" \
-    && chmod +x /usr/local/bin/docker
-
-#RUN curl -fsSL --create-dirs --output /usr/local/bin/docker \
-#       "https://download.docker.com/linux/static/$(uname -m)/docker-${DOCKER_VERSION}" \
-#    && chmod +x /usr/local/bin/docker
-
-
 ############ PERMISSAO ESCRITA APP #################
 RUN	mkdir /opt/app \
     && chmod 777 /opt/app
 
-############ USUARIO JENKINS #######################
-USER ${user}
+WORKDIR /opt/app
 
 ############ CONFIGURACOES FINAIS ##################
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
+
+# Prepare and cache node_modules
+COPY ./package.json .
+COPY ./yarn.lock .
+RUN yarn
+RUN yarn cypress install
+
+# Copy your application's files
+COPY . .
+RUN chmod +x ./run.sh
+
+# Run Cypress tests
+#CMD ["cat", "./package.json"]
+#CMD ["yarn", "cypress", "run"]
+#CMD ["cat", "./target/cucumber-reports/cucumber-report.json"]
+CMD ["./run.sh"]
